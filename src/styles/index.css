@@ -5,7 +5,7 @@
 
 @layer theme {
   :root {
-    --color-coffee-latte: #3a2515;
+    --color-coffee-latte: #dabba4;
     --color-coffee-cho: #3a2515;
     --color-coffee-dark2: #4b4238;
     --color-coffee-darken: rgb(58, 55, 55);
@@ -136,22 +136,32 @@
     background: var(--color-coffee-mid);
     border-radius: calc(infinity * 1px);
     font-weight: 500;
+    color: var(--color-coffee-cho);
     cursor: pointer;
+    transition: transform 0.2s ease;
   }
 
-  .jumbotron {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  .order-btn-scalefx {
+    transform: scale(1.1);
   }
 
-  .jumbotron img {
-    transition: transform 0.3s ease;
+  .section-transition {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
   }
 
-  .jumbotron:hover img {
-    transform: scale(1.05);
+  .section-exit {
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   @media (max-width: 480px) {
+    .nav-link {
+      font-size: 1.150rem;
+    }
+
     .nav-menu {
       min-width: 6rem;
       padding: 0.5rem 0.75rem;

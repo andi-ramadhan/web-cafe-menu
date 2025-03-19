@@ -17,6 +17,7 @@ const MenuNav = ({ activeCategory, setActiveCategory }) => {
           className="nav-menu-slider"
           style={{ transform: getSliderPosition() }}
         ></div>
+        
         {categories.map((category, index) => (
           <a
             key={category.id}
