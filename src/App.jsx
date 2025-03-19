@@ -13,11 +13,24 @@ function App() {
   const [isPending, startTransition] = useTransition()
 
   const handleSectionChange = (section) => {
+    if (section === activeSection) return;
+
     startTransition(() => {
+      //add exit class
+      document.querySelector('.section-transition').classList.add('section-exit');
+
+      //wait for exit animation
       setTimeout(() => {
         setActiveSection(section);
-      }, 50);
-    })
+        //add enter class
+        document.querySelector('.section-transition').classList.add('section-enter');
+
+        //remove enter class after frame
+        requestAnimationFrame(() => {
+          document.querySelector('.section-transition').classList.remove('section-enter', 'section-exit');
+        });
+      }, 200);
+    });
   }
 
   return (
@@ -29,7 +42,7 @@ function App() {
           setActiveSection={handleSectionChange}
         />
 
-        <div className={`section-transition ${isPending ? 'section-exit' : ''}`}>
+        <div className="section-transition">
           {activeSection === 'menu' ? (
             <main id="menu" className="flex-1 container mx-auto bg-black/30 backdrop-blur-sm">
               <div className="sticky top-0 z-50 py-2 px-2 sm:py-4 bg-[var(--color-coffee-dark2)]/80 backdrop-blur-sm">
@@ -45,9 +58,9 @@ function App() {
             <Contact />
           )}
         </div>
-        <footer className="w-full bg-black py-4">
+        <footer className="w-full bg-black pt-4">
           <p className="text-center text-[var(--color-coffee-smoke)]">
-            &copy; 2025 Coffee Cafe - Andi Ramadhan
+            &copy; 2025 Web Cafe Menu - Andi Fajar Ramadhan
           </p>
         </footer>
       </div>

@@ -22,7 +22,7 @@ const MenuNav = ({ activeCategory, setActiveCategory }) => {
           <a
             key={category.id}
             className={`nav-menu ${activeCategory === category.id ? 'active' : ''}`}
-            href="#"
+            href="#menu"
             onClick={(e) => {
               e.preventDefault();
               setActiveCategory(category.id);

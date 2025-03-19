@@ -8,21 +8,15 @@ const Header = ({ activeSection, setActiveSection}) => {
         <nav className="flex flex-row items-center gap-5">
           <a
             className={`nav-link ${activeSection === 'menu' ? 'font-medium' : ''}`}
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setActiveSection('menu');
-            }}
+            href="#menu"
+            onClick={() => setActiveSection('menu')}
           >
             Menu
           </a>
           <a
             className={`nav-link ${activeSection === 'contact' ? 'font-medium' : ''}`}
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setActiveSection('contact');
-            }}
+            href="#contact"
+            onClick={() => setActiveSection('contact')}
           >
             Contact Us
           </a>
