@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=League+Script&family=Meow+Script&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Meow+Script&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');
 
 @import "tailwindcss";
 
@@ -17,7 +16,6 @@
     --color-coffee-smoke: #F1DEC9;
     --color-dark-lowvis: rgba(56, 56, 56, 0.3);
     --font-meow: 'Meow Script', cursive;
-    --font-league: 'League Script', cursive;
     --font-poppins: 'Poppins', sans-serif;
   }
 }
@@ -212,16 +210,6 @@
       padding-block: 0.375rem;
       font-size: 0.875rem;
     }
-  }
-}
-
-@layer utilities {
-  .text-shadow-coffee {
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
-  }
-  
-  .text-shadow-glow {
-    text-shadow: 0 0.025rem 4px rgba(255, 255, 255, 1);
   }
 }
 
