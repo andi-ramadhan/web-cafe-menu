@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { usePageTransition } from './hooks/usePageTransition'
+import { useState, useTransition } from 'react'
 import Background from './components/Background'
 import Header from './components/Header'
 import MenuNav from './components/MenuNav'
@@ -10,7 +9,29 @@ import './styles/index.css'
 
 function App() {
   const [activeCategory, setActiveCategory] = useState('coffee')
-  const [activeSection, setActiveSection] = usePageTransition()
+  const [activeSection, setActiveSection] = useState('menu')
+  const [, startTransition] = useTransition() // Remove isPending
+
+  const handleSectionChange = (section) => {
+    if (section === activeSection) return;
+
+    startTransition(() => {
+      //add exit class
+      document.querySelector('.section-transition').classList.add('section-exit');
+
+      //wait for exit animation
+      setTimeout(() => {
+        setActiveSection(section);
+        //add enter class
+        document.querySelector('.section-transition').classList.add('section-enter');
+
+        //remove enter class after frame
+        requestAnimationFrame(() => {
+          document.querySelector('.section-transition').classList.remove('section-enter', 'section-exit');
+        });
+      }, 200);
+    });
+  }
 
   return (
     <>
@@ -18,7 +39,7 @@ function App() {
       <div className="relative w-full min-h-screen z-20">
         <Header
           activeSection={activeSection}
-          setActiveSection={setActiveSection}
+          setActiveSection={handleSectionChange}
         />
 
         <div className="section-transition">
