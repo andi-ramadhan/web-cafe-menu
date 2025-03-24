@@ -10,12 +10,12 @@ let dbConnection;
 const gracefulShutdown = async (signal) => {
   console.log(`\n${signal} signal recieved: starting graceful shutdown`);
   
-  // stop accepting new connections
+  // Stop accepting new connections
   server.close(async () => {
     console.log('HTTP server closed');
     
     try {
-      // close database connection
+      // Close database connection
       if (dbConnection) {
         console.log('Closing database connection...');
         await dbConnection.close();
@@ -30,7 +30,7 @@ const gracefulShutdown = async (signal) => {
     }
   });
 
-  // force shutdofn after timeout
+  // Force shutdown after timeout
   setTimeout(() => {
     console.error('Could not close connection in time, forcefully shutting down');
     process.exit(1);
@@ -49,7 +49,7 @@ const startServer = async () => {
     process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
     process.on('SIGINT', () => gracefulShutdown('SIGINT'));
     
-    // handle uncaught exceptions and rejections
+    // Handle uncaught exceptions and rejections
     process.on('uncaughtException', (error) => {
       console.error('Uncaught Exception:', error);
       gracefulShutdown('Uncaught Exception');
