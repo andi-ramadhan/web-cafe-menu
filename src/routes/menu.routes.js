@@ -6,7 +6,7 @@ const { validateMenu } = require('../middlewares/validator');
 router.get('/', menuController.getAllMenu);
 // router.get('/menu/:id');
 router.post('/', validateMenu, menuController.addMenu);
-// router.put('/menu/:id');
+router.put('/:id', validateMenu, menuController.editMenu);
 // router.delete('/menu/:id');
 
 module.exports = router;

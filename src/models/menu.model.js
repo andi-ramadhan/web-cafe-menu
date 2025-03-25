@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const menuSchema = new Schema({
+  menuId: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true
