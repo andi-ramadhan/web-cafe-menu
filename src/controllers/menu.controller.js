@@ -62,31 +62,57 @@ exports.getAllMenu = async (req, res) => {
 
 exports.editMenu = async (req, res) => {
   const { id } = req.params;
+  const { category } = req.body;
   
   try {
-    const [updated] = await Menu.updateMany(
-      ...req.body,
-      {
-        where: { menuId: id }
-      }
-    );
+    const existingMenu = await Menu.findOne({ menuId: id});
 
-    if (!updated) {
-      res.status(404).json({ error: 'No Menus Found'})
+    if (!existingMenu) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Menu not found'
+      });
     }
 
-    const updatedMenu = await Menu.findOne({ where: { menuId: id } });
+    //if category is being updated, generate new menuId
+    let updateData = { ...req.body };
+    if (category && category !== existingMenu.category) {
+      updateData.menuId = `${category}-${id.split('-')[1]}`; //keep the same id
+    }
+
+    let updatedMenu = await Menu.findOneAndUpdate(
+      { menuId: id },
+      updateData,
+      { new: true }
+    );
+
     res.status(200).json({
       message: 'Menu updated successfully',
       data: {
-        menuId: updatedMenu.id,
+        menuId: updatedMenu.menuId,
         menuName: updatedMenu.name,
         menuDescription: updatedMenu.description,
         menuPrice: updatedMenu.price,
-        menuImage: updatedMenu.image
+        menuImage: updatedMenu.image,
+        category: updatedMenu.category
       }
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      status: 'error',
+      error: err.message
+    });
+  }
+};
+
+exports.deleteMenu = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const findMenu = await Menu.findOne({ menuId: id });
+
+    if (!findMenu) {
+      res.status(404).json
+    }
   }
 };
