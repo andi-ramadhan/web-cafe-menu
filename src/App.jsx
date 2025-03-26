@@ -10,7 +10,7 @@ import './styles/index.css'
 function App() {
   const [activeCategory, setActiveCategory] = useState('coffee')
   const [activeSection, setActiveSection] = useState('menu')
-  const [, startTransition] = useTransition() // Remove isPending
+  const [, startTransition] = useTransition()
 
   const handleSectionChange = (section) => {
     if (section === activeSection) return;
@@ -35,7 +35,7 @@ function App() {
 
   return (
     <>
-      <Background />
+      <div className="fixed inset-0 -z-10 overflow-hidden bg-coffee-white"></div>
       <div className="relative w-full min-h-screen z-20">
         <Header
           activeSection={activeSection}
@@ -45,7 +45,7 @@ function App() {
         <div className="section-transition">
           {activeSection === 'menu' ? (
             <main id="menu" className="flex-1 container mx-auto bg-black/30 backdrop-blur-sm">
-              <div className="sticky top-0 z-50 py-2 px-2 sm:py-4 bg-[var(--color-coffee-dark2)]/80 backdrop-blur-sm">
+              <div className="sticky top-0 z-50 py-2 px-2 sm:py-4">
                 <MenuNav 
                   activeCategory={activeCategory} 
                   setActiveCategory={setActiveCategory} 
