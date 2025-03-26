@@ -4,7 +4,7 @@ const Menu = require('../models/menu.model');
 exports.addMenu = async (req, res) => {
   try {
     const { category } = req.body; 
-    const menuId = `${category}-${nanoid(16)}`;
+    const menuId = `${category}-${nanoid(5)}`;
 
     const menuPayload = {
       menuId: menuId,
@@ -62,29 +62,30 @@ exports.getAllMenu = async (req, res) => {
 
 exports.editMenu = async (req, res) => {
   const { id } = req.params;
-  const { category } = req.body;
   
   try {
-    const existingMenu = await Menu.findOne({ menuId: id});
+    if (Object.keys(req.body).length === 0) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Update data is required'
+      });
+    }
 
-    if (!existingMenu) {
+    const updatedMenu = await Menu.findOneAndUpdate(
+      { menuId: id },
+      req.body,
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+
+    if (!updatedMenu) {
       return res.status(404).json({
         status: 'error',
         message: 'Menu not found'
       });
     }
-
-    //if category is being updated, generate new menuId
-    let updateData = { ...req.body };
-    if (category && category !== existingMenu.category) {
-      updateData.menuId = `${category}-${id.split('-')[1]}`; //keep the same id
-    }
-
-    let updatedMenu = await Menu.findOneAndUpdate(
-      { menuId: id },
-      updateData,
-      { new: true }
-    );
 
     res.status(200).json({
       message: 'Menu updated successfully',
@@ -109,10 +110,28 @@ exports.deleteMenu = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const findMenu = await Menu.findOne({ menuId: id });
+    const deletedMenu = await Menu.findOneAndDelete({ menuId: id });
 
-    if (!findMenu) {
-      res.status(404).json
+    if (!deletedMenu) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Menu not found'
+      });
     }
+
+    res.status(200).json({
+      stauts: 'success',
+      message: 'Menu deleted successfully',
+      data: {
+        menuId: deletedMenu.menuId,
+        name: deletedMenu.name,
+        category: deletedMenu.category
+      }
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      error: err.message
+    });
   }
 };

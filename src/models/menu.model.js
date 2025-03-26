@@ -25,11 +25,13 @@ const menuSchema = new Schema({
   category: {
     type: String,
     required: true,
+    immutable: true,
     enum: ['coffee', 'nonCoffee', 'food']
   }
 }, {
   timestamps: true,
-  collection: 'menu'
+  collection: 'menu',
+  versionKey: false
 });
 
 module.exports = mongoose.model('Menu', menuSchema);
