@@ -1,12 +1,14 @@
 const express = require('express');
 const cors = require('cors');
+const { verifyToken } = require('./middlewares/auth.middleware');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/menu', require('./routes/menu.routes'));
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/menu', verifyToken, require('./routes/menu.routes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

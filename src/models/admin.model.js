@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const bcrypt = require('bcrypt');
 
 const adminSchema = new Schema({
   userId: {
@@ -34,6 +35,22 @@ const adminSchema = new Schema({
   collection: 'admin',
   versionKey: false
 });
+
+adminSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+
+  try {
+    const saltGen = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, saltGen);
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
+adminSchema.methods.comparePassword = async function(targetPassword) {
+  return bcrypt.compare(targetPassword, this.password);
+};
 
 // prevent password from being sent in responses
 adminSchema.methods.toJSON = function() {

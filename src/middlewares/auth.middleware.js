@@ -26,6 +26,9 @@ exports.verifyToken = async (req, res, next) => {
     req.admin = admin;
     next();
   } catch (err) {
-
+    return res.status(401).json({
+      status: 'error',
+      message: 'Invalid token'
+    });
   }
-}
+};
