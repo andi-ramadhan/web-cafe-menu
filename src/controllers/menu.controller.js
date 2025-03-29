@@ -1,14 +1,36 @@
 const { nanoid } = require('nanoid');
 const Menu = require('../models/menu.model');
+const imageService = require('../services/image.service');
+const fs = require('fs').promises;
 
 exports.addMenu = async (req, res) => {
+  let imageFilename = null;
+
   try {
+    if (!req.file) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Image is required'
+      });
+    }
+
+    // comporess img and get filename
+    try {
+      compressedImage = await imageService.compressImage(req.file);
+    } catch (compressionError) {
+      return res.status(400).json({
+        status: 'error',
+        message: `Image processing failed: ${compressionError.message}`
+      });
+    }
+
     const { category } = req.body; 
     const menuId = `${category}-${nanoid(5)}`;
 
     const menuPayload = {
-      menuId: menuId,
-      ...req.body
+      menuId,
+      ...req.body,
+      image: compressedImage.webpFilename
     };
 
     const menu = await Menu.create(menuPayload);
@@ -21,9 +43,15 @@ exports.addMenu = async (req, res) => {
         menuName: menu.name,
         menuDescription: menu.description,
         menuPrice: menu.price,
+        menuImage: menu.image
       }
     });
   } catch (err) {
+    // If menu creation fails, add both files to cleanup queue
+    if (compressedImage) {
+      imageService.deleteImage(compressedImage.webpFilename);
+    }
+
     res.status(400).json({
       status: 'error',
       message: err.message 
@@ -40,13 +68,6 @@ exports.getAllMenu = async (req, res) => {
     if (name) query.name = { $regex: name, $options: 'i'}; // i makes the search case-insensitive
 
     const resultMenus = await Menu.find(query);
-
-    if (!resultMenus.length) {
-      return res.status(404).json({
-        status: 'fail',
-        message: 'No menus found',
-      });
-    }
     
     res.json({
       status: 'success',
@@ -64,28 +85,26 @@ exports.editMenu = async (req, res) => {
   const { id } = req.params;
   
   try {
-    if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Update data is required'
-      });
-    }
-
-    const updatedMenu = await Menu.findOneAndUpdate(
-      { menuId: id },
-      req.body,
-      {
-        new: true,
-        runValidators: true
-      }
-    );
-
-    if (!updatedMenu) {
+    const menu = await Menu.findOne({ menuId: id });
+    if (!menu) {
       return res.status(404).json({
         status: 'error',
         message: 'Menu not found'
       });
     }
+
+    if (req.file) {
+      await imageService.deleteImage(menu.image);
+
+      const imageFilename = await imageService.compressImage(req.file);
+      req.body.image = imageFilename;
+    }
+
+    const updatedMenu = await Menu.findOneAndUpdate(
+      { menuId: id },
+      req.body,
+      { new: true, runValidators: true }
+    );
 
     res.status(200).json({
       message: 'Menu updated successfully',
@@ -99,6 +118,10 @@ exports.editMenu = async (req, res) => {
       }
     });
   } catch (err) {
+    if (req.file) {
+      await imageService.deleteImage(req.file.filename).catch(console.error);
+    }
+
     res.status(500).json({
       status: 'error',
       error: err.message
@@ -110,22 +133,25 @@ exports.deleteMenu = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedMenu = await Menu.findOneAndDelete({ menuId: id });
+    const menu = await Menu.findOne({ menuId: id });
 
-    if (!deletedMenu) {
+    if (!menu) {
       return res.status(404).json({
         status: 'error',
         message: 'Menu not found'
       });
     }
 
+    await imageService.deleteImage(menu.image);
+    await menu.deleteOne();
+
     res.status(200).json({
       stauts: 'success',
       message: 'Menu deleted successfully',
       data: {
-        menuId: deletedMenu.menuId,
-        name: deletedMenu.name,
-        category: deletedMenu.category
+        menuId: menu.menuId,
+        name: menu.name,
+        category: menu.category
       }
     });
   } catch (err) {

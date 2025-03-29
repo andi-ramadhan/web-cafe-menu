@@ -1,11 +1,15 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { verifyToken } = require('./middlewares/auth.middleware');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// serve static files from storage dir
+app.use('/storage', express.static(path.join(__dirname, '../storage')));
 
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/menu', verifyToken, require('./routes/menu.routes'));
