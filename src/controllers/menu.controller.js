@@ -1,26 +1,13 @@
 const { nanoid } = require('nanoid');
 const Menu = require('../models/menu.model');
-const imageService = require('../services/image.service');
-const fs = require('fs').promises;
+const { cloudinary } = require('../config/cloudinary.config');
 
 exports.addMenu = async (req, res) => {
-  let imageFilename = null;
-
   try {
     if (!req.file) {
       return res.status(400).json({
         status: 'error',
         message: 'Image is required'
-      });
-    }
-
-    // comporess img and get filename
-    try {
-      compressedImage = await imageService.compressImage(req.file);
-    } catch (compressionError) {
-      return res.status(400).json({
-        status: 'error',
-        message: `Image processing failed: ${compressionError.message}`
       });
     }
 
@@ -30,28 +17,31 @@ exports.addMenu = async (req, res) => {
     const menuPayload = {
       menuId,
       ...req.body,
-      image: compressedImage.webpFilename
+      image: req.file.path
     };
 
-    const menu = await Menu.create(menuPayload);
+    try {
+      const menu = await Menu.create(menuPayload);
 
-    return res.status(201).json({
-      status: 'success',
-      message: 'Menu added successfully',
-      data: {
-        menuId: menuId,
-        menuName: menu.name,
-        menuDescription: menu.description,
-        menuPrice: menu.price,
-        menuImage: menu.image
+      return res.status(201).json({
+        status: 'success',
+        message: 'Menu added successfully',
+        data: {
+          menuId: menuId,
+          menuName: menu.name,
+          menuDescription: menu.description,
+          menuPrice: menu.price,
+          menuImage: menu.image
+        }
+      });
+    } catch (dbError) {
+      if (req.file?.path) {
+        const publicId = `web-cafe-menu/${req.file.filename}`;
+        await cloudinary.uploader.destroy(publicId).catch(console.error);
       }
-    });
-  } catch (err) {
-    // If menu creation fails, add both files to cleanup queue
-    if (compressedImage) {
-      imageService.deleteImage(compressedImage.webpFilename);
+      throw dbError;  
     }
-
+  } catch (err) {
     res.status(400).json({
       status: 'error',
       message: err.message 
@@ -94,10 +84,16 @@ exports.editMenu = async (req, res) => {
     }
 
     if (req.file) {
-      await imageService.deleteImage(menu.image);
-
-      const imageFilename = await imageService.compressImage(req.file);
-      req.body.image = imageFilename;
+      // delete old image if it exists
+      const publicId = `web-cafe-menu/${menu.image.split('/').slice(-1)[0].split('.')[0]}`;
+      try {
+        await cloudinary.uploader.destroy(publicId);
+        console.log('Old image deleted from Cloudinary:', publicId);
+      } catch (cloudinaryErr) {
+        console.error('Cloudinary deletion error:', cloudinaryErr);
+      }
+      // new image already uploaded by multer-storage-cloudinary
+      req.body.image = req.file.path;
     }
 
     const updatedMenu = await Menu.findOneAndUpdate(
@@ -118,8 +114,9 @@ exports.editMenu = async (req, res) => {
       }
     });
   } catch (err) {
-    if (req.file) {
-      await imageService.deleteImage(req.file.filename).catch(console.error);
+    if (req.file?.path) {
+      const publicId = req.file.filename;
+      await cloudinary.uploader.destroy(publicId).catch(console.error);
     }
 
     res.status(500).json({
@@ -142,11 +139,21 @@ exports.deleteMenu = async (req, res) => {
       });
     }
 
-    await imageService.deleteImage(menu.image);
+    // delete img from cloudinary
+    if (menu.image) {
+      const publicId = `web-cafe-menu/${menu.image.split('/').slice(-1)[0].split('.')[0]}`;
+      try {
+        await cloudinary.uploader.destroy(publicId);
+        console.log('Image deleted from Cloudinary:', publicId);
+      } catch (cloudinaryErr) {
+        console.error('Cloudinary deletion error:', cloudinaryErr);
+      }
+    }
+
     await menu.deleteOne();
 
     res.status(200).json({
-      stauts: 'success',
+      status: 'success',
       message: 'Menu deleted successfully',
       data: {
         menuId: menu.menuId,
@@ -157,7 +164,7 @@ exports.deleteMenu = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       status: 'error',
-      error: err.message
+      message: err.message
     });
   }
 };
