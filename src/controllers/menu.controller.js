@@ -1,6 +1,6 @@
 const { nanoid } = require('nanoid');
 const Menu = require('../models/menu.model');
-const { cloudinary } = require('../config/cloudinary.config');
+const { cloudinary, imageTransformation } = require('../config/cloudinary.config');
 
 exports.addMenu = async (req, res) => {
   try {
@@ -85,15 +85,15 @@ exports.editMenu = async (req, res) => {
 
     if (req.file) {
       // delete old image if it exists
-      const publicId = `web-cafe-menu/${menu.image.split('/').slice(-1)[0].split('.')[0]}`;
+      const oldPublicId = `web-cafe-menu/${menu.image.split('/').slice(-1)[0].split('.')[0]}`;
       try {
-        await cloudinary.uploader.destroy(publicId);
-        console.log('Old image deleted from Cloudinary:', publicId);
+        await cloudinary.uploader.destroy(oldPublicId);
+        console.log('Old image deleted from Cloudinary:', oldPublicId);
+
+        req.body.image = req.file.path;
       } catch (cloudinaryErr) {
         console.error('Cloudinary deletion error:', cloudinaryErr);
       }
-      // new image already uploaded by multer-storage-cloudinary
-      req.body.image = req.file.path;
     }
 
     const updatedMenu = await Menu.findOneAndUpdate(

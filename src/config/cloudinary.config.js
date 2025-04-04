@@ -11,23 +11,29 @@ cloudinary.config({
 
 let uploadInProgress = false;
 
+const imageTransformation = [
+  { width: 800, height: 800, crop: "limit" },
+  { quality: "auto:eco" },
+  { fetch_format: "webp" }
+];
+
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'web-cafe-menu',
     allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    transformation: [
-      { width: 800, height: 800, crop: "limit" },
-      { quality: "auto:eco" },
-      { fetch_format: "webp" }
-    ],
     format: 'webp',
+    transformation: imageTransformation,
     public_id: (req, file) => {
       const uniqueSuffix = Date.now();
       const filename = file.originalname.split('.')[0];
       return `${filename}-${uniqueSuffix}`;
-    }
-  }
+    },
+    overwrite: true,
+    invalidate: true, // invalidate CDN cache when overwriting
+    resource_type: 'auto'
+  },
+  allowedFormats: ['jpg', 'jpeg', 'png', 'webp']
 });
 
 const preventMultipleUploads = (req, res, next) => {
@@ -57,5 +63,6 @@ module.exports = {
   upload,
   cloudinary,
   preventMultipleUploads,
-  markUploadComplete
+  markUploadComplete,
+  imageTransformation
 };
