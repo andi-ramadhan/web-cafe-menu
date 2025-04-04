@@ -1,6 +1,6 @@
 const { nanoid } = require('nanoid');
 const Menu = require('../models/menu.model');
-const { cloudinary, imageTransformation } = require('../config/cloudinary.config');
+const { cloudinary } = require('../config/cloudinary.config');
 
 exports.addMenu = async (req, res) => {
   try {
