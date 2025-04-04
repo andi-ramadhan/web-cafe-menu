@@ -5,11 +5,11 @@
 @theme {
   --color-coffee-white: #f3f1ef;
   --color-coffee-cho: #3a2515;
+  --color-coffee-latte: #f0e3d9;
 }
 
 @layer theme {
   :root {
-    --color-coffee-latte: #f0e3d9;
     --color-coffee-cho: #3a2515;
     --color-coffee-dark2: #4b4238;
     --color-coffee-darken: rgb(58, 55, 55);
@@ -86,7 +86,7 @@
     height: 100%;
     top: 0;
     left: 0;
-    background: var(--color-coffee-latte);
+    background: var(--color-coffee-cho);
     transition: transform 300ms ease-in-out;
     z-index: 1;
     border-radius: 2rem;
@@ -98,14 +98,7 @@
   }
 
   .nav-menu.active {
-    color: white;
-  }
-
-  .nav-active {
-    background-color: var(--color-coffee-light-50);
-    color: black;
-    border: none;
-    font-weight: 500;
+    color: var(--color-coffee-latte);
   }
 
   .menu-card {
@@ -158,7 +151,7 @@
 
   .section-enter {
     opacity: 0;
-    transform: translateY(-40px);
+    transform: translateY(10px);
   }
 
   .section-exit {
@@ -170,7 +163,7 @@
   .menu-transition {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1);
     will-change: opacity;
   }
 
@@ -181,6 +174,10 @@
   .menu-exit {
     opacity: 0;
     pointer-events: none;
+  }
+
+  .text-shadow-black {
+    text-shadow: 0.5px 0.5px 0.5px rgba(0, 0, 0, 0.5);
   }
 
   @media (max-width: 480px) {

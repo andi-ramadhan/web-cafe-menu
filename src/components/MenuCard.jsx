@@ -18,14 +18,14 @@ const MenuCard = ({ item }) => {
           alt={item.name} 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-coffee-cho/50  via-coffee-cho/30 to-transparent"></div>
       </div>
 
       <div className="content-container">
         <h2 className="text-lg sm:text-xl font-semibold text-white mb-2">
           {item.name}
         </h2>
-        <p className="text-sm sm:text-base text-gray-300 mb-3 sm:mb-4">
+        <p className="text-sm sm:text-base text-gray-200 mb-3 sm:mb-4">
           {item.description}
         </p>
         <div className="flex justify-between items-center">
