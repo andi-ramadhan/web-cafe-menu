@@ -45,7 +45,7 @@ function App() {
         <div className="section-transition">
           {activeSection === 'menu' ? (
             <main id="menu" className="flex-1 container mx-auto">
-              <div className="sticky top-0 z-50 py-2 px-2 sm:py-4">
+              <div className="sticky top-0 z-50 py-2 px-2 sm:py-4 bg-black/10 backdrop-blur-lg">
                 <MenuNav 
                   activeCategory={activeCategory} 
                   setActiveCategory={setActiveCategory} 

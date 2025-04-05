@@ -1,6 +1,6 @@
 const SearchBar = () => {
   return (
-    <div className="max-w-[830px] mx-auto px-2 sm:px-4">
+    <div className="max-w-[800px] mx-auto px-2 sm:px-4">
       <input
         type="search"
         placeholder="Search menu..."
