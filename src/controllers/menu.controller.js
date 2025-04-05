@@ -28,10 +28,10 @@ exports.addMenu = async (req, res) => {
         message: 'Menu added successfully',
         data: {
           menuId: menuId,
-          menuName: menu.name,
-          menuDescription: menu.description,
-          menuPrice: menu.price,
-          menuImage: menu.image
+          name: menu.name,
+          description: menu.description,
+          price: menu.price,
+          image: menu.image
         }
       });
     } catch (dbError) {
