@@ -1,6 +1,6 @@
 const Contact = () => {
   return (
-    <main id="contact" className="flex-1 mx-auto rounded-t-3xl bg-black/25 py-10 max-w-[1400px]">
+    <main id="contact" className="flex-1 mx-auto rounded-3xl bg-black/25 py-10 max-w-[1400px]">
       <div className="max-w-[800px] mx-auto px-4">
         <h2 className="text-3xl sm:text-4xl text-white mb-6">Contact Us</h2>
         <form className="space-y-4">

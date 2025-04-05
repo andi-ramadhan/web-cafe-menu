@@ -1,9 +1,9 @@
 const Header = ({ activeSection, setActiveSection}) => {
   return (
-    <header className="max-w-[1400px] mx-auto pb-4 pt-6 px-4 sm:pb-8 sm:pt-10">
+    <header className="max-w-[1400px] mx-auto py-1 px-4 sm:py-2">
       <div className="flex flex-row justify-between items-center">
-        <h1 className="text-4xl sm:text-6xl text-coffee-cho">
-          <span className="font-[Poppins] font-extralight italic text-xl sm:text-2xl">RE:</span>Coffee
+        <h1 className="text-3xl md:text-5xl text-coffee-cho">
+          <span className="font-[Poppins] font-extralight italic text-xs">RE:</span>Coffee
         </h1>
         <nav className="flex flex-row items-center gap-5">
           <button

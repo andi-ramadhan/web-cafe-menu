@@ -12,7 +12,7 @@ const MenuNav = ({ activeCategory, setActiveCategory }) => {
 
   return (
     <nav className="w-full max-w-[800px] mx-auto mb-2 sm:mb-4 sm:px-4">
-      <div className="flex flex-row justify-around items-center text-[var(--color-coffee-smoke)] nav-menu-container">
+      <div className="flex flex-row justify-around items-center text-coffee-latte nav-menu-container">
         <div
           className="nav-menu-slider"
           style={{ transform: getSliderPosition() }}

@@ -11,32 +11,31 @@ const MenuCard = ({ item }) => {
   };
 
   return (
-    <article className="menu-card">
-      <div className="absolute inset-0">
+    <article className="menu-card mb-9 md:mb-0]">
+      <div className="relative flex-1 overflow-hidden">
         <img 
-          src={`/assets/${item.image}`} 
+          src={item.image} 
           alt={item.name} 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40  via-coffee-cho/30 to-transparent"></div>
       </div>
 
-      <div className="content-container">
-        <h2 className="text-lg sm:text-xl font-semibold text-white mb-2">
+      <div className="content-container bg-coffee-cho p-4">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-coffee-latte mb-2">
           {item.name}
         </h2>
-        <p className="text-sm sm:text-base text-gray-200 text-shadow-black mb-3 sm:mb-4">
+        <p className="text-sm sm:text-sm text-coffee-latte mb-1 sm:mb-2 line-clamp-2">
           {item.description}
         </p>
         <div className="flex justify-between items-center">
-          <span className="text-white font-bold text-sm sm:text-base">
+          <span className="text-coffee-latte font-bold text-base">
             ${item.price}
           </span>
           <button 
-            className={`order-btn text-sm sm:text-base ${isClicked ? 'order-btn-scalefx' : ''}`}
+            className={`order-btn text-base ${isClicked ? 'order-btn-scalefx' : ''}`}
             onClick={handleClick}
           >
-            Order
+            Add
           </button>
         </div>
       </div>

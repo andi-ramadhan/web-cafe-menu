@@ -1,38 +1,65 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import MenuCard from './MenuCard'
-import { menuItems } from '../js/menuItems'
+import { fetchData } from '../js/fetchedData';
 
 const MenuGrid = ({ category }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const items = menuItems[category] || []
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const gridRef = useRef(null);
 
   useEffect(() => {
-    setIsTransitioning(true);
+    const loadMenus = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchData(category);
+        setItems(response.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    const grid = document.querySelector('.menu-grid');
-    grid.classList.add('menu-exit');
+    loadMenus();
 
-    setTimeout(() => {
-      grid.classList.add('menu-enter');
-      grid.classList.remove('menu-exit');
-
-      //remove class after frame
-      requestAnimationFrame(() => {
-        grid.classList.remove('menu-enter');
-        setIsTransitioning(false);
-      });
-    }, 300);
+    if (gridRef.current) {
+      setIsTransitioning(true);
+      gridRef.current.classList.add('menu-exit');
+      
+      setTimeout(() => {
+        gridRef.current?.classList.add('menu-enter');
+        gridRef.current?.classList.remove('menu-exit');
+  
+        requestAnimationFrame(() => {
+          gridRef.current?.classList.remove('menu-enter');
+          setIsTransitioning(false);
+        });
+      }, 300);
+    }
   }, [category]);
+
+  if (loading) {
+    return <div className='text-white text-center py-8'>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className='text-white text-center py-8'>Error: {error}</div>;
+  }
 
   return (
     <div className="container mx-auto py-8">
-      <div className="menu-grid menu-transition grid grid-cols-1 gap-4 mx-4 sm:grid-cols-2 md:grid-cols-3 sm:gap-8 sm:mx-10">
+      <div
+        ref={gridRef} 
+        className="menu-grid menu-transition grid grid-cols-1 gap-4 mx-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 sm:gap-10 sm:mx-10"
+      >
         {items.map(item => (
-          <MenuCard key={item.id} item={item} />
+          <MenuCard key={item.menuId} item={item} />
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MenuGrid
+export default MenuGrid;
