@@ -1,7 +1,18 @@
+import { useState } from "react";
+
 const Contact = () => {
+  const [isClicked, setIsClicked] = useState(false);
+  
+  const handleClick = () => {
+    setIsClicked(true);
+    setTimeout(() => {
+      setIsClicked(false);
+    }, 200);
+  };
+
   return (
-    <main id="contact" className="flex-1 mx-auto rounded-3xl bg-black/25 py-10 max-w-[1400px]">
-      <div className="max-w-[800px] mx-auto px-4">
+    <main id="contact" className="flex-1 m-auto rounded-xl bg-coffee-dark py-10 max-w-[800px] font-poppins">
+      <div className="max-w-[600px] mx-auto px-4">
         <h2 className="text-3xl sm:text-4xl text-white mb-6">Contact Us</h2>
         <form className="space-y-4">
           <div>
@@ -30,7 +41,8 @@ const Contact = () => {
           </div>
           <button
             type="submit"
-            className="order-btn px-8 py-2"
+            className={`order-btn bg-coffee-latte text-coffee-cho rounded-2xl px-8 py-2 ${isClicked ? 'scale-95' : ''}`}
+            onClick={handleClick}
           >
             Send Message
           </button>

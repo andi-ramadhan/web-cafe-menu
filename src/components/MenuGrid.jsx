@@ -52,7 +52,7 @@ const MenuGrid = ({ category }) => {
     <div className="container mx-auto py-8">
       <div
         ref={gridRef} 
-        className="menu-grid menu-transition grid grid-cols-1 gap-4 mx-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 sm:gap-10 sm:mx-10"
+        className="menu-grid menu-transition grid grid-cols-1 gap-8 mx-4 sm:grid-cols-2 sm:gap-10 lg:grid-cols-3"
       >
         {items.map(item => (
           <MenuCard key={item.menuId} item={item} />

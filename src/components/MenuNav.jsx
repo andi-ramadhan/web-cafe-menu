@@ -11,17 +11,17 @@ const MenuNav = ({ activeCategory, setActiveCategory }) => {
   }
 
   return (
-    <nav className="w-full max-w-[800px] mx-auto mb-2 sm:mb-4 sm:px-4">
-      <div className="flex flex-row justify-around items-center text-coffee-latte nav-menu-container">
+    <nav className="max-w-[800px] mx-auto mb-2 sm:mb-4 rounded-lg bg-coffee-chobg">
+      <div className="flex flex-row justify-around items-center text-white nav-menu-container">
         <div
-          className="nav-menu-slider"
+          className="nav-menu-slider w-[calc(100% / 3)]"
           style={{ transform: getSliderPosition() }}
         ></div>
         
         {categories.map((category, index) => (
           <a
             key={category.id}
-            className={`nav-menu ${activeCategory === category.id ? 'active' : ''}`}
+            className={`nav-menu text-sm sm:text-lg font-medium ${activeCategory === category.id ? 'active' : ''}`}
             href="#menu"
             onClick={(e) => {
               e.preventDefault();

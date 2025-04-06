@@ -34,8 +34,8 @@ function App() {
 
   return (
     <>
-      <div className="fixed inset-0 -z-10 overflow-hidden bg-coffee-latte"></div>
-      <div className="relative w-full min-h-screen z-20">
+      <div className="fixed inset-0 -z-10 overflow-hidden bg-coffee-bg"></div>
+      <div className="relative w-auto m-4 min-h-screen z-20">
         <Header
           activeSection={activeSection}
           setActiveSection={handleSectionChange}
@@ -44,7 +44,7 @@ function App() {
         <div className="section-transition">
           {activeSection === 'menu' ? (
             <main id="menu" className="flex-1 container mx-auto">
-              <div className="sticky top-0 z-50 py-2 px-2 sm:py-4 bg-coffee-latte/60 backdrop-blur-md">
+              <div className="sticky top-0 z-50 py-2 px-2 sm:py-4 backdrop-blur-md">
                 <MenuNav 
                   activeCategory={activeCategory} 
                   setActiveCategory={setActiveCategory} 
@@ -57,8 +57,8 @@ function App() {
             <Contact />
           )}
         </div>
-        <footer className="w-full bg-black/80 py-1 absolute bottom-0">
-          <p className="text-xs text-center text-coffee-latte">
+        <footer className="w-full mt-5 absolute bottom-0">
+          <p className="text-xs text-center text-black">
             &copy; 2025 Web Cafe Menu - Andi Fajar Ramadhan
           </p>
         </footer>

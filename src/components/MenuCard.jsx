@@ -11,8 +11,8 @@ const MenuCard = ({ item }) => {
   };
 
   return (
-    <article className="menu-card mb-9 md:mb-0]">
-      <div className="relative flex-1 overflow-hidden">
+    <article className="menu-card rounded-lg">
+      <div className="relative flex-1 overflow-hidden scale-115">
         <img 
           src={item.image} 
           alt={item.name} 
@@ -20,19 +20,19 @@ const MenuCard = ({ item }) => {
         />
       </div>
 
-      <div className="content-container bg-coffee-cho p-4">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-coffee-latte mb-2">
-          {item.name}
+      <div className="content-container bg-coffee-dark pb-4 px-4 py-2 z-10">
+        <h2 className="font-poppins text-white text-xl sm:text-2xl md:text-2xl mb-2">
+          {item.name.toUpperCase()}
         </h2>
-        <p className="text-sm sm:text-sm text-coffee-latte mb-1 sm:mb-2 line-clamp-2">
+        <p className="text-white/70 text-sm sm:text-sm mb-1 sm:mb-2 line-clamp-1">
           {item.description}
         </p>
         <div className="flex justify-between items-center">
-          <span className="text-coffee-latte font-bold text-base">
+          <span className="text-white font-semibold font-[Onest] text-md md:text-xl">
             ${item.price}
           </span>
           <button 
-            className={`order-btn text-base ${isClicked ? 'order-btn-scalefx' : ''}`}
+            className={`bg-coffee-latte order-btn text-sm py-2 px-5 sm:py-2 sm:px-6 sm:text-md rounded-xl text-coffee-cho font-semibold ${isClicked ? 'scale-95' : ''}`}
             onClick={handleClick}
           >
             Add
